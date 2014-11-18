@@ -1,0 +1,83 @@
+{
+  "salmon-trout": {
+    "name": "Salmon and seatrout",
+    "uri": "%s/licences/salmon-trout",
+    "prices": {
+      "full":{
+        "name": "Full season",
+        "concessions": {
+          "disabled": 48.00,
+          "senior": 48.00,
+          "adult": 72.00,
+          "junior": 5.00
+        }
+      },
+      "8-day": {
+        "name": "8 days",
+        "concessions":{
+          "disabled": 23.00,
+          "senior": 23.00,
+          "adult": 23.00,
+          "junior": 23.00
+        }
+      },
+      "24-hours": {
+        "name": "25 hours",
+        "concessions": {
+          "disabled": 5.00,
+          "senior": 5.00,
+          "adult": 5.00,
+          "junior": 5.00
+        }
+      }
+    }
+  },
+  "coarse": {
+    "name": "Trout and coarse",
+    "uri": "%s/licences/coarse",
+    "prices": {
+      "full":{
+        "name": "Full season",
+        "concessions": {
+          "disabled": 18.00,
+          "senior": 18.00,
+          "adult": 27.00,
+          "junior": 5.00
+        }
+      },
+      "8-day": {
+        "name": "8 days",
+        "concessions":{
+          "disabled": 10.00,
+          "senior": 10.00,
+          "adult": 10.00,
+          "junior": 10.00
+        }
+      },
+      "24-hours": {
+        "name": "25 hours",
+        "concessions": {
+          "disabled": 3.75,
+          "senior": 3.75,
+          "adult": 3.75,
+          "junior": 3.75
+        }
+      }
+    }
+  },
+  "thames": {
+    "name": "River Thames",
+    "uri": "%s/licences/thames",
+    "prices": {
+      "full":{
+        "name": "Full season",
+        "concessions": {
+          "disabled": 18.50,
+          "senior": 18.50,
+          "adult": 28.50,
+          "junior": 18.50
+        }
+      }
+    }
+  }
+}

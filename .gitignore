@@ -3,3 +3,4 @@ include
 lib
 .Python
 *.pyc
+local_config.py
