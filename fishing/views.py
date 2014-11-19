@@ -8,12 +8,7 @@ import dateutil.parser
 from flask import Flask, request, redirect, render_template, url_for, session, flash, abort
 from flask.json import JSONEncoder
 from flask_oauthlib.client import OAuth
-from flask.ext.qrcode import QRcode
-
-app = Flask(__name__)
-app.config.from_object('config')
-oauth = OAuth(app)
-QRcode(app)
+from fishing import app, oauth
 
 registers = oauth.remote_app(
     'registers',
@@ -175,9 +170,3 @@ def verified():
     session['registers_token'] = (resp['access_token'], '')
     return redirect(url_for('index'))
 
-if __name__ == '__main__':
-    os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = 'true'
-    os.environ['DEBUG'] = 'true'
-    # Bind to PORT if defined, otherwise default to 5000.
-    port = int(os.environ.get('PORT', 5001))
-    app.run(host='0.0.0.0', port=port)

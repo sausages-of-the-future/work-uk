@@ -1,4 +1,5 @@
 TODO:
+* fix qrcode generator
 * Clear session on relivant pages
 * store dates properly
 * check existing licences
