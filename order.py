@@ -63,7 +63,6 @@ class Order():
         prices = json.loads(open('prices.json').read())
         return prices[self.licence_type]['uri'].replace('%s', self._base_url)
 
-
     def calculate_total(self):
         prices = json.loads(open('prices.json').read())
         return prices[self.licence_type]['prices'][self.duration]['concessions'][self.concession_type]

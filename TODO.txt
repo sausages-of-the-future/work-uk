@@ -1,12 +1,12 @@
 TODO:
+* Clear session on relivant pages
 * store dates properly
 * check existing licences
-* mobve QR codde cache somewhere less annoying
 * redirect to correct action after auth (annoying session issues)
 * decorator for has_oauth
 * guide to bylaws
 * info page (inc legislation from the pdfs)
-* show finshing points on maps
+* show fishing points on maps
 * add web app stuff
 
 
@@ -15,3 +15,4 @@ DONE:
 * Make footer look OK
 * style verified facts
 * check age eligability
+* mobve QR codde cache somewhere less annoying

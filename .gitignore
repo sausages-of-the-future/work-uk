@@ -4,3 +4,4 @@ lib
 .Python
 *.pyc
 local_config.py
+static/qrcodes/*.png

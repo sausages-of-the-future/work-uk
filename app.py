@@ -17,8 +17,8 @@ QRcode(app)
 
 registers = oauth.remote_app(
     'registers',
-    consumer_key='4e48a76e66e145418bca11666405462a',
-    consumer_secret='80033aef320643ba990ce0ea621aa4d7',
+    consumer_key='9fb586c6f5684c6cb3c74e317a8bcda9',
+    consumer_secret='516c5fb4f0b4416e8136dc514915cb25',
     request_token_params={'scope': 'person:view personal_licence:view personal_licence:add'},
     base_url='http://localhost:5000',
     request_token_url=None,
@@ -27,6 +27,7 @@ registers = oauth.remote_app(
     authorize_url='http://localhost:5000/oauth/authorize'
 )
 
+#filters
 @app.template_filter('reference_number')
 def reference_number_filter(s):
     split = s.split('/')
@@ -42,10 +43,12 @@ def pad_reference(s):
     result = [s[i:i+n] for i in range(0, len(s), n)]
     return " ".join(result)
 
+#auth helper
 @registers.tokengetter
 def get_registers_oauth_token():
     return session.get('registers_token')
 
+#views
 @app.route("/")
 def index():
     return render_template('index.html')
@@ -66,7 +69,6 @@ def buy():
         person = registers.get(about['person'].replace(registers.base_url, '')).data
         existing_licences = registers.get('/personal-licences').data
         disabled = False
-
         order = Order(dateutil.parser.parse(person['born_at']), existing_licences, disabled, app.config['BASE_URL'])
         session['order'] = order.to_dict()
 
@@ -172,7 +174,6 @@ def verified():
 
     session['registers_token'] = (resp['access_token'], '')
     return redirect(url_for('index'))
-
 
 if __name__ == '__main__':
     os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = 'true'

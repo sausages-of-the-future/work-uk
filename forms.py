@@ -1,5 +1,5 @@
 from datetime import datetime
-from wtforms import Form, BooleanField, TextField, RadioField, HiddenField, TextAreaField, validators, ValidationError, PasswordField, FormField, DateField
+from wtforms import Form, TextField, RadioField, DateField, validators
 
 class LicenceTypeForm(Form):
     licence_type = RadioField('Licence type', choices=[('salmon-trout', 'Salmon and trout'), ('coarse', 'Trout and coarse'), ('thames', 'River Thames')], validators=[validators.required()])

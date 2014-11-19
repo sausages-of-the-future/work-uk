@@ -8,7 +8,7 @@
         <ul>
           {% for licence in licences %}
             <li>
-            {{qrcode(licence.uri|reference_number)}}
+            {{qrcode(licence.uri|reference_number, filedir="qrcodes")}}
               <h3>Fishing Rod Licence</h3>
               <h4>{{licence.uri|reference_number|pad_reference}}</h4>
               <dl>
