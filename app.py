@@ -17,8 +17,8 @@ QRcode(app)
 
 registers = oauth.remote_app(
     'registers',
-    consumer_key='9fb586c6f5684c6cb3c74e317a8bcda9',
-    consumer_secret='516c5fb4f0b4416e8136dc514915cb25',
+    consumer_key='c1aedf2d9fa74884930392850712c0a6',
+    consumer_secret='00952aff578e476b93c7a10e9a1cbb05',
     request_token_params={'scope': 'person:view personal_licence:view personal_licence:add'},
     base_url='http://localhost:5000',
     request_token_url=None,
