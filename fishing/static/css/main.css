@@ -6,14 +6,6 @@ body {
 body, h1, h2,h3, h4, h5 .button, table {
   font-family: 'Roboto Slab', serif;
 }
-
-h2 {
-  font-size:1.3rem;
-}
-
-h3 {
-  font-size:1rem;
-}
 /*a {*/
   /*text-decoration:underline;*/
 /*}*/

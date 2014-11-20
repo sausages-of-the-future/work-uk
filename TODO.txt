@@ -1,8 +1,6 @@
 TODO:
-* fix qrcode generator
 * Clear session on relivant pages
 * store dates properly
-* check existing licences
 * redirect to correct action after auth (annoying session issues)
 * decorator for has_oauth
 * guide to bylaws
