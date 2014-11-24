@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Organisations{% endblock%}
+{% block content %}
+  <div class="row">
+    <div class="small-12 columns">
+     <p>
+      	<a href="{{url_for('start_type')}}" class="button expand">Start a company or charity</a>	
+      </p>
+      <h2>Information</h2>
+      <ul class="side-nav">
+        <li>
+          <a href="{{url_for('types')}}">Types of organisation</a>
+        </li>
+     </ul>
+    </div>
+  </div>
+{% endblock %}

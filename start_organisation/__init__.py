@@ -7,4 +7,4 @@ app = Flask(__name__)
 app.config.from_object(os.environ.get('SETTINGS'))
 oauth = OAuth(app)
 
-from fishing import views
+from start_organisation import views
