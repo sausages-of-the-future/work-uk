@@ -44,9 +44,13 @@ def start_type():
 def types():
     return render_template('types.html')
 
-@app.route("/types/limited-company")
-def types_limited_company():
-    return render_template('type.html', name="Limited Company", detail_template="_types-limited-company.html")
+@app.route("/types/public-limited-company")
+def types_public_limited_company():
+    return render_template('type.html', name="Public Limited Company", detail_template="_types-public-limited-company.html")
+
+@app.route("/types/private-limited-company")
+def types_private_limited_company():
+    return render_template('type.html', name="Private company limited by guarantee", detail_template="_types-private-limited-company.html")
 
 @app.route("/types/ordinary-business-partnership")
 def types_ordinary_business_partnership():
@@ -71,7 +75,6 @@ def types_charity():
 @app.route("/types/charitable-incorperated-organisation")
 def types_charitable_incorperated_organisation():
     return render_template("type.html", name="Charitable Incorperated Organisation", detail_template='_types-charitable-incorperated-organisation.html')
-
 
 @app.route("/types/cooperative")
 def types_cooperative():
