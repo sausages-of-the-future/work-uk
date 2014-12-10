@@ -1,9 +1,9 @@
 <html>
   <head>
     <title>{% block title %}{% endblock%} | BETAGOV</title>
-    <link rel="stylesheet" href="{{ url_for('static',filename='vendor/roboto-slab-fontface/roboto-slab-fontface.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static',filename='vendor/foundation/css/foundation.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static',filename='css/main.css') }}">
+    <link rel="stylesheet" href="{{config.WWW_BASE_URL + '/static/vendor/roboto-slab-fontface/roboto-slab-fontface.css' }}">
+    <link rel="stylesheet" href="{{config.WWW_BASE_URL + '/static/vendor/foundation/css/foundation.css' }}">
+    <link rel="stylesheet" href="{{config.WWW_BASE_URL + '/static/css/main.css' }}">
     <script type="text/javascript" src="{{ url_for('static', filename='vendor/jquery/dist/jquery.min.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='vendor/foundation/js/foundation.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='vendor/foundation/js/foundation/foundation.alert.js') }}"></script>
@@ -14,7 +14,7 @@
       <nav class="top-bar" data-topbar>
         <ul class="title-area">
           <li class="name">
-          <h1><a href="/">GOV.UK <em>Start an organisation</em></a></h1>
+          <h1><a href="/">IDEALGOV <em>Start an organisation</em></a></h1>
           </li>
         </ul>
       </nav>
