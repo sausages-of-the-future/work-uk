@@ -7,7 +7,7 @@ from flask import Flask, request, redirect, render_template, url_for, session, f
 from flask.json import JSONEncoder
 from flask_oauthlib.client import OAuth
 
-import start_organisation.forms
+import start_organisation.forms as forms
 from start_organisation.order import Order
 from start_organisation import app, oauth
 
@@ -33,7 +33,7 @@ def get_registry_oauth_token():
 #views
 @app.route("/")
 def index():
-    return render_template('index.html')
+    return redirect("%s/organisations" % app.config['WWW_BASE_URL'])
 
 @app.route("/start", methods=['GET', 'POST'])
 @registry_oauth_required
