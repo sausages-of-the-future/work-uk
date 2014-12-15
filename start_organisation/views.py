@@ -46,7 +46,7 @@ def start_type():
         order = Order.from_dict(order_data)
 
     # create form and add options
-    form = forms.StartOrganisationForm(request.form)
+    form = forms.StartOrganisationTypeForm(request.form)
     form.organisation_type.choices = []
     data = json.loads(open('organisation_types.json').read())
     for item in data:
@@ -71,11 +71,14 @@ def start_details():
     else:
         return redirect(url_for('start_type'))
 
+    form = forms.StartOrganisationDetailsForm(request.form)
+
     if request.method == 'POST':
         data = {
             'type_uri': order.type_uri,
             'name': 'my company'
         }
+
         response = registry.post('/organisations', data=data, format='json')
         if response.status == 201:
             flash('Organsiation created', 'success')
@@ -84,8 +87,7 @@ def start_details():
         else:
             flash('Something went wrong', 'error')
 
-
-    return render_template('start-details.html')
+    return render_template('start-details.html', form=form)
 
 @app.route("/types")
 def types():

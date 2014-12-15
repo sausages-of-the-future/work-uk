@@ -1,7 +1,10 @@
 import json
-from wtforms import Form, TextField, RadioField, DateField, validators
+from wtforms import Form, TextField, TextAreaField, RadioField, DateField, validators
 
-class StartOrganisationForm(Form):
+class StartOrganisationTypeForm(Form):
     organisation_type = RadioField('Organisation type', choices=[], validators=[validators.required()])
-    name = TextField(validators=[validators.required()])
+
+class StartOrganisationDetailsForm(Form):
+    name = TextField('Organisation name', validators=[validators.required()])
+    activities = TextField('Organisation name', validators=[validators.required()])
 
