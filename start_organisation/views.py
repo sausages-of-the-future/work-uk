@@ -76,7 +76,8 @@ def start_details():
     if request.method == 'POST':
         data = {
             'type_uri': order.type_uri,
-            'name': 'my company'
+            'name': form.name.data,
+            'activities': form.activities.data
         }
 
         response = registry.post('/organisations', data=data, format='json')
@@ -88,54 +89,6 @@ def start_details():
             flash('Something went wrong', 'error')
 
     return render_template('start-details.html', form=form)
-
-@app.route("/types")
-def types():
-    return render_template('types.html')
-
-@app.route("/types/public-limited-company")
-def types_public_limited_company():
-    return render_template('type.html', name="Public Limited Company", detail_template="_types-public-limited-company.html")
-
-@app.route("/types/private-limited-company")
-def types_private_limited_company():
-    return render_template('type.html', name="Private company limited by guarantee", detail_template="_types-private-limited-company.html")
-
-@app.route("/types/ordinary-business-partnership")
-def types_ordinary_business_partnership():
-    return render_template('type.html', name="Ordinary Business Partnership", detail_template='_types-ordinary-business-partnership.html')
-
-@app.route("/types/limited-partnership")
-def types_limited_partnership():
-    return render_template("type.html", name="Limited Partnership", detail_template='_types-limited-partnership.html')
-
-@app.route("/types/limited-liability-partnership")
-def types_limited_liability_partnership():
-    return render_template("type.html", name="Limited Liability Partnership", detail_template='_types-limited-liability-partnership.html')
-
-@app.route("/types/unincorperated-association")
-def types_unincorperated_association():
-    return render_template("type.html", name="Unincorperated Association", detail_template='_types-unincorperated-association.html')
-
-@app.route("/types/charity")
-def types_charity():
-    return render_template("type.html", name="Charity", detail_template='_types-charity.html')
-
-@app.route("/types/charitable-incorperated-organisation")
-def types_charitable_incorperated_organisation():
-    return render_template("type.html", name="Charitable Incorperated Organisation", detail_template='_types-charitable-incorperated-organisation.html')
-
-@app.route("/types/cooperative")
-def types_cooperative():
-    return render_template("type.html", name="Co-operative", detail_template='_types-cooperative.html')
-
-@app.route("/types/industrial-and-provident-society")
-def types_industrial_and_provident_society():
-    return render_template("type.html", name="Industrial and Provident Society", detail_template='_types-industrial-and-provident-society.html')
-
-@app.route("/types/community-interest-company")
-def types_community_interest_company():
-    return render_template("type.html", name="Community Interest Company", detail_template='_types-community-interest-company.html')
 
 @app.route('/verify')
 def verify():

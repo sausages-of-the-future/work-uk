@@ -6,5 +6,4 @@ class StartOrganisationTypeForm(Form):
 
 class StartOrganisationDetailsForm(Form):
     name = TextField('Organisation name', validators=[validators.required()])
-    activities = TextField('Organisation name', validators=[validators.required()])
-
+    activities = TextAreaField('Main business activities', validators=[validators.required()])
