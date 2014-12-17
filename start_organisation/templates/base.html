@@ -1,6 +1,9 @@
 <html>
   <head>
-    <title>{% block title %}{% endblock%} | BETAGOV</title>
+    <meta charset="utf-8">
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock%}</title>
     <link rel="stylesheet" href="{{config.WWW_BASE_URL + '/static/vendor/roboto-slab-fontface/roboto-slab-fontface.css' }}">
     <link rel="stylesheet" href="{{config.WWW_BASE_URL + '/static/vendor/foundation/css/foundation.css' }}">
     <link rel="stylesheet" href="{{config.WWW_BASE_URL + '/static/css/main.css' }}">
@@ -12,14 +15,9 @@
   <body>
     <div class="header service">
       <nav class="top-bar" data-topbar>
-        <ul class="title-area">
-          <li class="name">
-          <h1><a href="/">IDEALGOV <em>Start an organisation</em></a></h1>
-          </li>
-        </ul>
+        <h1><a href="/">Start an organisation</a></h1>
       </nav>
     </div>
-
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
         <div class="row">

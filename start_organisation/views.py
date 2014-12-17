@@ -6,11 +6,9 @@ import dateutil.parser
 from flask import Flask, request, redirect, render_template, url_for, session, flash, abort
 from flask.json import JSONEncoder
 from flask_oauthlib.client import OAuth
-
 import start_organisation.forms as forms
 from start_organisation.order import Order
 from start_organisation import app, oauth
-
 from decorators import registry_oauth_required
 
 registry = oauth.remote_app(
@@ -34,10 +32,20 @@ def get_registry_oauth_token():
 @app.route("/")
 def index():
     return redirect("%s/organisations" % app.config['WWW_BASE_URL'])
+    return redirect(url_for('index'))
 
-@app.route("/start", methods=['GET', 'POST'])
+@app.route("/start")
+def start():
+    session.clear()
+    if not session.get('registry_token', False):
+        session['resume_url'] = 'choose_type'
+        return redirect(url_for('verify'))
+    else:
+        return redirect(url_for('start_type'))
+
+@app.route("/choose-type", methods=['GET', 'POST'])
 @registry_oauth_required
-def start_type():
+def choose_type():
 
     # create order
     order = Order()
@@ -106,5 +114,9 @@ def verified():
         )
 
     session['registry_token'] = (resp['access_token'], '')
-    return redirect(url_for('index'))
+    if session.get('resume_url'):
+        return redirect(url_for(session.get('resume_url')))
+    else:
+        return redirect(url_for('index'))
+
 
