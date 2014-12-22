@@ -55,14 +55,10 @@ def choose_type():
 
     # create form and add options
     form = forms.StartOrganisationTypeForm(request.form)
-    form.organisation_type.choices = []
-    data = json.loads(open('organisation_types.json').read())
-    for item in data:
-        form.organisation_type.choices.append(("%s/%s" % (app.config['BASE_URL'], item['slug']), item['name']))
-    form.organisation_type.value = order.type_uri
+    form.organisation_type.value = order.organisation_type
 
     if request.method == 'POST':
-        order.type_uri = form.organisation_type.data
+        order.organisation_type = form.organisation_type.data
         session['order'] = order.to_dict()
         return redirect(url_for('start_details'))
 
@@ -83,7 +79,7 @@ def start_details():
 
     if request.method == 'POST':
         data = {
-            'type_uri': order.type_uri,
+            'organisation_type': order.organisation_type,
             'name': form.name.data,
             'activities': form.activities.data
         }

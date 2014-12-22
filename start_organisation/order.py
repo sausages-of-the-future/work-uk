@@ -1,15 +1,15 @@
 class Order():
 
-    type_uri = None
+    organisation_type = None
     data = {}
 
     def to_dict(self):
         result = {}
-        result['type_uri'] = self.type_uri
+        result['organisation_type'] = self.organisation_type
         return result
 
     @classmethod
     def from_dict(cls, data):
         order = Order()
-        order.type_uri = data['type_uri']
+        order.organisation_type = data['organisation_type']
         return order
