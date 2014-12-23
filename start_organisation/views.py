@@ -1,15 +1,30 @@
 import os
 import jinja2
 import json
-import hashlib
 import dateutil.parser
 from flask import Flask, request, redirect, render_template, url_for, session, flash, abort
-from flask.json import JSONEncoder
+import requests
 from flask_oauthlib.client import OAuth
 import start_organisation.forms as forms
 from start_organisation.order import Order
 from start_organisation import app, oauth
 from decorators import registry_oauth_required
+
+service = {
+  "name": "Start organisation",
+  "minister": "Minister for business",
+  "registers": ["Licences", "Organisations"],
+  "slug": "start-organisation",
+  "service_base_url_config": "ORGANISATIONS_BASE_URL",
+  "policies": [],
+  "legislation": [],
+  "guides": [
+    {"title": "Guide for Directors", "slug": "directors"},
+    {"title": "Guide for Trustees", "slug": "trustees"},
+    {"title": "Types of organisation", "slug": "types"}
+  ]
+}
+
 
 registry = oauth.remote_app(
     'registry',
@@ -93,6 +108,17 @@ def start_details():
             flash('Something went wrong', 'error')
 
     return render_template('start-details.html', form=form)
+
+@app.route("/manage/<organisation_id>")
+def manage_organisation(organisation_id):
+    uri = "%s/organisations/%s" % (app.config['REGISTRY_BASE_URL'], organisation_id)
+    response = requests.get(uri)
+    if response.status_code == 200:
+        organisation = response.json()
+    else:
+        abort(404)
+
+    return render_template("manage.html", organisation=organisation, service=service)
 
 @app.route('/verify')
 def verify():

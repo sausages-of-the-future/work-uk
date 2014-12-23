@@ -1,6 +1,7 @@
 import os
 from flask import Flask
 from flask_oauthlib.client import OAuth
+from flask.ext.cors import CORS
 
 #app
 app = Flask(__name__)

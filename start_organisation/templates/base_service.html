@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="off-canvas-wrap service" data-offcanvas>
+    <div class="inner-wrap">
+      <nav class="tab-bar">
+        <section class="left-small">
+          <a class="left-off-canvas-toggle" href="#"><i class="fa fa-info-circle"></i></a> 
+        </section> 
+        <section class="middle tab-bar-section">
+          <h1 class="title"><a href="/">{% block service_title %}{% endblock%}</a></h1>
+        </section>
+        <section class="right-small">
+          <a class="right-off-canvas-toggle menu-icon" href="#">
+            <i class="fa fa-book"></i>
+          </a>
+        </section>
+      </nav>
+      <section class="main-section">
+        <div class="row">
+          <div class="small-12 columns">
+            {% block service_content %}
+
+            {% endblock %}
+          </div>
+        </div>
+      </section>
+
+        <aside class="left-off-canvas-menu">
+        <h3>About</h3>
+        <p>
+          The <a href="#">{{service.minister}}</a> is ressponsible for this service and it uses data from
+          {% for register in service.registers %}
+            <a href="#">
+              {% if loop.last and not loop.first %}
+                and 
+              {% endif %}
+              {{register|lower}}
+            </a>
+            {% if loop.last %}
+              {% if service.registers|length > 1 %}
+                registers.
+              {% else %}
+                register.
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+        </p>
+        <ul class="off-canvas-list">
+          <li><a href="#">Performance</a></li>
+          <li><a href="#">Legislation</a></li> 
+          <li><a href="#">Policy tests</a></li>
+          <li><a href="#">Make a complaint</a></li>
+          <li><a href="#">Service blog</a></li>
+        </ul>
+       </aside>
+
+        <a class="exit-off-canvas"></a>
+        <aside class="right-off-canvas-menu"> 
+          <h3>Guides</h3>
+          <ul class="off-canvas-list"> 
+          {% for guide in service.guides %}
+          <li><a href="#">{{guide.title}}</a></li>
+          {% endfor %}
+        </ul> 
+      </aside> 
+
+      </div> 
+    </div>
+{% endblock %}
+
+
