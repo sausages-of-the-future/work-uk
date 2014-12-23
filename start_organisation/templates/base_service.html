@@ -11,7 +11,8 @@
         </section>
         <section class="right-small">
           <a class="right-off-canvas-toggle menu-icon" href="#">
-            <i class="fa fa-book"></i>
+            <i class="fa fa-bars"></i>
+            <i class="fa fa-circle notification"></i>
           </a>
         </section>
       </nav>
@@ -56,11 +57,8 @@
 
         <a class="exit-off-canvas"></a>
         <aside class="right-off-canvas-menu"> 
-          <h3>Guides</h3>
           <ul class="off-canvas-list"> 
-          {% for guide in service.guides %}
-          <li><a href="#">{{guide.title}}</a></li>
-          {% endfor %}
+          <li><a href="#"><span class="round alert label">5</span> Notifications</a></li>
         </ul> 
       </aside> 
 
