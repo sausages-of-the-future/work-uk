@@ -109,6 +109,19 @@ def start_details():
 
     return render_template('start-details.html', form=form)
 
+@app.route("/manage")
+def manage():
+    #for now, just redirect to the last one that was created
+    uri = "%s/organisations" % app.config['REGISTRY_BASE_URL']
+    response = requests.get(uri)
+    if response.status_code == 200:
+        organisations = response.json()
+        organisation_uri = organisations[len(organisations) -1]['uri']
+        organisation_id = organisation_uri.split("/")[len(organisation_uri.split("/")) - 1]
+        return redirect(url_for('manage_organisation', organisation_id=organisation_id))
+    else:
+        abort(404)
+
 @app.route("/manage/<organisation_id>")
 def manage_organisation(organisation_id):
     uri = "%s/organisations/%s" % (app.config['REGISTRY_BASE_URL'], organisation_id)
