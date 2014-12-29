@@ -4,11 +4,13 @@ import json
 import dateutil.parser
 from flask import Flask, request, redirect, render_template, url_for, session, flash, abort
 import requests
+import hashlib
 from flask_oauthlib.client import OAuth
 import start_organisation.forms as forms
 from start_organisation.order import Order
 from start_organisation import app, oauth
 from decorators import registry_oauth_required
+from twilio.rest import TwilioRestClient
 
 service = {
   "name": "Start organisation",
@@ -25,7 +27,6 @@ service = {
   ]
 }
 
-
 registry = oauth.remote_app(
     'registry',
     consumer_key=app.config['REGISTRY_CONSUMER_KEY'],
@@ -37,6 +38,11 @@ registry = oauth.remote_app(
     access_token_url='%s/oauth/token' % app.config['REGISTRY_BASE_URL'],
     authorize_url='%s/oauth/authorize' % app.config['REGISTRY_BASE_URL']
 )
+
+def make_random_token():
+    random =  hashlib.sha1(os.urandom(128)).hexdigest()
+    random = random.upper()
+    return "%s-%s-%s-%s" % (random[0:4], random[5:9], random[10:14], random[15:19])
 
 #auth helper
 @registry.tokengetter
@@ -93,21 +99,93 @@ def start_details():
     form = forms.StartOrganisationDetailsForm(request.form)
 
     if request.method == 'POST':
-        data = {
-            'organisation_type': order.organisation_type,
-            'name': form.name.data,
-            'activities': form.activities.data
-        }
-
-        response = registry.post('/organisations', data=data, format='json')
-        if response.status == 201:
-            flash('Organsiation created', 'success')
-            session.pop('order', None)
-            return redirect(url_for('index'))
-        else:
-            flash('Something went wrong', 'error')
+        order.name = form.name.data
+        order.activities = form.activities.data
+        session['order'] = order.to_dict()
+        return redirect(url_for('start_invite'))
 
     return render_template('start-details.html', form=form)
+
+@app.route("/start/invite", methods=['GET', 'POST'])
+@registry_oauth_required
+def start_invite():
+
+    order = None
+    order_data = session.get('order', None)
+    if order_data:
+        order = Order.from_dict(order_data)
+    else:
+        return redirect(url_for('start_type'))
+
+    form = forms.StartOrganisationInviteForm(request.form)
+
+    if request.method == 'POST':
+        if form.validate():
+
+            #send sms
+            client = TwilioRestClient(app.config['TWILIO_ACCOUNT_ID'], app.config['TWILIO_AUTH_TOKEN'])
+            for person in form.people:
+                if person.phone.data:
+                    message = "Please visit Idealgov and enter the following code to verify you wish to become a director of '%s': %s" % (order.name, make_random_token())
+                    client.sms.messages.create(to=person.phone.data, from_=app.config['TWILLIO_PHONE_NUMBER'], body=message)
+
+            #next
+            return redirect(url_for('start_register'))
+
+    return render_template('start-invite.html', form=form)
+
+@app.route("/start/register", methods=['GET', 'POST'])
+@registry_oauth_required
+def start_register():
+
+    order = None
+    order_data = session.get('order', None)
+    if order_data:
+        order = Order.from_dict(order_data)
+    else:
+        return redirect(url_for('start_type'))
+
+    form = forms.StartOrganisationRegistrationForm(request.form)
+
+    if request.method == "POST":
+        if form.validate():
+            return redirect(url_for('start_review'))
+
+    return render_template('start-register.html', form=form)
+
+@app.route("/start/review", methods=['GET', 'POST'])
+@registry_oauth_required
+def start_review():
+    order = None
+    order_data = session.get('order', None)
+    if order_data:
+        order = Order.from_dict(order_data)
+    else:
+        return redirect(url_for('start_type'))
+
+    form = forms.StartOrganisationReviewForm(request.form)
+
+    if request.method == 'POST':
+        if form.validate():
+            data = {
+                'organisation_type': order.organisation_type,
+                'name': form.name.data,
+                'activities': form.activities.data
+            }
+
+            response = registry.post('/organisations', data=data, format='json')
+            if response.status == 201:
+                flash('Organsiation created', 'success')
+                session.pop('order', None)
+                return redirect(url_for('start_done'))
+            else:
+                flash('Something went wrong', 'error')
+
+    return render_template('start-review.html', form=form, order=order)
+
+@app.route("/start/done")
+def start_done():
+    return render_template('start-done.html')
 
 @app.route("/manage")
 def manage():

@@ -1,0 +1,24 @@
+{% extends "base_transaction.html" %}
+{% block title %}Types of organisation{% endblock%}
+{% block transaction_content %}
+  <div class="row">
+    <div class="small-12 columns">
+     <h2>Invite directors</h2>
+      <form action="" method="post">
+        {{ render_field(form.user_is_director) }}
+        {{ render_field(form.director_count, type='number') }}
+        <div id="director_contact">
+          {% for person in form.people %}
+              {{person}}
+          {% endfor %}
+          <p>
+            Each person will need to enter a one-use code, then sign in to register as directors</em>.
+          </p>
+          {{ render_field(form.method) }}
+
+        </div>
+        <button type="submit" class="btn  btn-default btn-lg">Next step</button>
+      </form>
+    </div>
+  </div>
+{% endblock %}

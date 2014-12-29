@@ -7,6 +7,9 @@ class Config(object):
     REGISTRY_CONSUMER_SECRET = os.environ['REGISTRY_CONSUMER_SECRET']
     BASE_URL = os.environ['BASE_URL']
     WWW_BASE_URL = os.environ['WWW_BASE_URL']
+    TWILIO_ACCOUNT_ID = os.environ['TWILIO_ACCOUNT_ID']
+    TWILIO_AUTH_TOKEN = os.environ['TWILIO_AUTH_TOKEN']
+    TWILLIO_PHONE_NUMBER = os.environ['TWILLIO_PHONE_NUMBER']
 
 class DevelopmentConfig(Config):
     DEBUG = True
