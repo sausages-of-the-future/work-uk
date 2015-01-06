@@ -1,4 +1,3 @@
-#!/usr/bin/python
 from work_uk import app
 import os
 
