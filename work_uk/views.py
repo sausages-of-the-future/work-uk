@@ -33,7 +33,18 @@ def index():
 
 @app.route("/prove-status")
 def prove_status():
+    if not session.get('registry_token', False):
+        session['resume_url'] = 'prove_status'
+        return redirect(url_for('verify'))
     return render_template('prove_status.html')
+
+@app.route("/prove-status/<slug>")
+def show_status(slug):
+    return render_template('show_status.html', slug=slug)
+
+@app.route("/prove-status/<slug>/view")
+def show_status_view(slug):
+    return render_template('show_status_view.html')
 
 
 @app.route("/sponsorship")

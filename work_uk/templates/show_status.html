@@ -1,0 +1,18 @@
+{% extends "base_transaction.html" %}
+{% block title %}Status check{% endblock %}
+{% block transaction_content %}
+  <div class="row">
+    <div class="small-12 columns">
+      <div class="panel">
+        <h3>Verify your identity</h3>
+        <p>
+          To check another person's right to work in the UK, you 
+          will need to verify your identity. The fact that you viewed their
+          information will be visible to them.
+        </p>
+          <a href="{{config.REGISTRY_BASE_URL}}/choose-provider?next={{config.BASE_URL}}{{url_for('show_status', slug=slug)}}/view" class="button expand">Get started <i class="fa fa-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+{% endblock %}
