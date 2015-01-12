@@ -31,6 +31,11 @@ def get_registry_oauth_token():
 def index():
     return redirect("%s/work-uk" % app.config['WWW_BASE_URL'])
 
+@app.route("/prove-status")
+def prove_status():
+    return render_template('prove_status.html')
+
+
 @app.route("/sponsorship")
 def sponsorship():
     return render_template('sponsorship.html')

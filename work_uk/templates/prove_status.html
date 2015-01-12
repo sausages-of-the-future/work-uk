@@ -1,0 +1,32 @@
+{% extends "base_transaction.html" %}
+{% block title %}Prove status{% endblock %}
+{% block transaction_content %}
+  <div class="row">
+    <div class="small-12 columns">
+      <ul class="verified-facts">
+        <li>
+          <span>&#10003;</span>
+          You are eligible to work in the UK until 20 March 2015.
+        </li>
+      </ul>
+      <h3>Send this link to your employer:</h3>
+      <p>
+        <input type="text" />
+      </p>
+      <p>
+        They will be able to use these codes to verify the following information about you:
+      </p>
+      <div class="panel">
+        <ul>
+          <li>Your name</li>
+          <li>Your passport number</li>
+          <li>The dates you are entitled to work in the UK between</li>
+          <li>The type of work you are allowed to do</li>
+        </ul>
+      </div>
+      <p>
+        You will also need to show them your passport so they can check your number.
+      </p>
+    </div>
+  </div>
+{% endblock %}
