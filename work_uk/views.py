@@ -29,7 +29,7 @@ def get_registry_oauth_token():
 #views
 @app.route("/")
 def index():
-    return redirect("%s/work-uk" % app.config['WWW_BASE_URL'])
+    return redirect("%s/work-visa" % app.config['WWW_BASE_URL'])
 
 @app.route("/prove-status")
 def prove_status():
