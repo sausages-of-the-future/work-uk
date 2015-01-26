@@ -1,25 +1,33 @@
 import os
-import jinja2
-import json
 import dateutil.parser
-from flask import Flask, request, redirect, render_template, url_for, session, flash, abort
-import requests
-from flask_oauthlib.client import OAuth
-import work_uk.forms as forms
+
+from flask import request, redirect, render_template, url_for, session, current_app
+
 from work_uk import app, oauth
+
 from decorators import registry_oauth_required
 
 registry = oauth.remote_app(
     'registry',
     consumer_key=app.config['REGISTRY_CONSUMER_KEY'],
     consumer_secret=app.config['REGISTRY_CONSUMER_SECRET'],
-    request_token_params={'scope': 'organisation:add'},
+    request_token_params={'scope': 'visa:add visa:view'},
     base_url=app.config['REGISTRY_BASE_URL'],
     request_token_url=None,
     access_token_method='POST',
     access_token_url='%s/oauth/token' % app.config['REGISTRY_BASE_URL'],
     authorize_url='%s/oauth/authorize' % app.config['REGISTRY_BASE_URL']
 )
+
+@app.template_filter('visa_number')
+def visa_number_filter(value):
+    return value.split('/')[-1]
+
+@app.template_filter('format_date')
+def format_date_filter(value):
+    date = dateutil.parser.parse(str(value))
+    return date.strftime('%d %B %Y')
+
 
 #auth helper
 @registry.tokengetter
@@ -32,18 +40,20 @@ def index():
     return redirect("%s/work-visa" % app.config['WWW_BASE_URL'])
 
 @app.route("/prove-status")
+@registry_oauth_required
 def prove_status():
     if not session.get('registry_token', False):
-        session['resume_url'] = 'prove_status'
         return redirect(url_for('verify'))
-    return render_template('prove_status.html')
 
-@app.route("/prove-status/<slug>")
-def show_status(slug):
-    return render_template('show_status.html', slug=slug)
+    visas = registry.get('/visas').data
+    if visas:
+        visa = visas[0]
+    else:
+        visa = None
+    return render_template('prove_status.html', visa=visa)
 
-@app.route("/prove-status/<slug>/view")
-def show_status_view(slug):
+@app.route("/prove-status/view/<visa_id>")
+def show_status_view(visa_id):
     return render_template('show_status_view.html')
 
 
@@ -60,9 +70,7 @@ def verify():
 
 @app.route('/verified')
 def verified():
-
     resp = registry.authorized_response()
-
     if resp is None:
         return 'Access denied: reason=%s error=%s' % (
         request.args['error_reason'],
@@ -71,7 +79,9 @@ def verified():
 
     session['registry_token'] = (resp['access_token'], '')
     if session.get('resume_url'):
-        return redirect(url_for(session.get('resume_url')))
+        resume_url = session.get('resume_url')
+        session.pop('resume_url', None)
+        return redirect(resume_url)
     else:
         return redirect(url_for('index'))
 

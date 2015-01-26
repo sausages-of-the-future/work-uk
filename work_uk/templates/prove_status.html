@@ -3,30 +3,32 @@
 {% block transaction_content %}
   <div class="row">
     <div class="small-12 columns">
-      <ul class="verified-facts">
-        <li>
-          <span>&#10003;</span>
-          You are eligible to work in the UK until 20 March 2015. <a class="register-link" href="#"><i class="fa fa-list-alt fa-1"></i> view source</a>
-        </li>
-      </ul>
-      <h3>Send this link to your employer:</h3>
-      <p>
-        <input type="text" value="{{config.BASE_URL}}{{url_for('show_status', slug='testing')}}" />
-      </p>
-      <p>
-        They will be able to use it to verify the following information about you:
-      </p>
-      <div class="panel">
-        <ul>
-          <li>Your name</li>
-          <li>Your passport number</li>
-          <li>The dates you are entitled to work in the UK between</li>
-          <li>The type of work you are allowed to do</li>
+
+        <ul class="verified-facts">
+          <li>
+            <span>&#10003;</span>
+            You are eligible to work in the UK until {{ visa.expires_at | format_date }}. <a class="register-link" href="#"><i class="fa fa-list-alt fa-1"></i> view source</a>
+          </li>
         </ul>
-      </div>
-      <p>
-        You will also need to show them your passport so they can check your number.
-      </p>
+        <h3>Send this link to your employer:</h3>
+        <p>
+          <input type="text" value="{{config.BASE_URL}}{{url_for('show_status_view')}}/{{ visa.uri|visa_number }}" />
+        </p>
+        <p>
+          They will be able to use it to verify the following information about you:
+        </p>
+        <div class="panel">
+          <ul>
+            <li>Your name</li>
+            <li>Your passport number {{v}}</li>
+            <li>The dates you are entitled to work in the UK between</li>
+            <li>The type of work you are allowed to do</li>
+          </ul>
+        </div>
+        <p>
+          You will also need to show them your passport so they can check your number.
+        </p>
+
     </div>
   </div>
 {% endblock %}
