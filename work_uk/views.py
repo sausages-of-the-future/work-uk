@@ -52,8 +52,8 @@ def prove_status():
         visa = None
     return render_template('prove_status.html', visa=visa)
 
-@app.route("/prove-status/view/<visa_id>")
-def show_status_view(visa_id):
+@app.route("/prove-status/view/<visa_number>")
+def show_status_view(visa_number):
     return render_template('show_status_view.html')
 
 

@@ -12,7 +12,7 @@
         </ul>
         <h3>Send this link to your employer:</h3>
         <p>
-          <input type="text" value="{{config.BASE_URL}}{{url_for('show_status_view')}}/{{ visa.uri|visa_number }}" />
+          <input type="text" value="{{config.BASE_URL}}{{url_for('show_status_view', visa_number=visa.uri|visa_number)}}" />
         </p>
         <p>
           They will be able to use it to verify the following information about you:
