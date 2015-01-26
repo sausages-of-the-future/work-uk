@@ -11,7 +11,7 @@ registry = oauth.remote_app(
     'registry',
     consumer_key=app.config['REGISTRY_CONSUMER_KEY'],
     consumer_secret=app.config['REGISTRY_CONSUMER_SECRET'],
-    request_token_params={'scope': 'visa:add visa:view'},
+    request_token_params={'scope': 'visa:add visa:view person:view'},
     base_url=app.config['REGISTRY_BASE_URL'],
     request_token_url=None,
     access_token_method='POST',
@@ -53,9 +53,17 @@ def prove_status():
     return render_template('prove_status.html', visa=visa)
 
 @app.route("/prove-status/view/<visa_number>")
+@registry_oauth_required
 def show_status_view(visa_number):
-    return render_template('show_status_view.html')
+    if not session.get('registry_token', False):
+        return redirect(url_for('verify'))
 
+    visa = registry.get('/visas/'+visa_number).data
+    person = registry.get(visa['person_uri']).data
+
+    #TODO check a token provided to authorize view
+    # and handle unauthorized or not found gracefully
+    return render_template('show_status_view.html', visa=visa, person=person)
 
 @app.route("/sponsorship")
 def sponsorship():
