@@ -19,6 +19,7 @@ registry = oauth.remote_app(
     authorize_url='%s/oauth/authorize' % app.config['REGISTRY_BASE_URL']
 )
 
+
 @app.template_filter('visa_number')
 def visa_number_filter(value):
     return value.split('/')[-1]
@@ -52,6 +53,7 @@ def prove_status():
     else:
         visa = None
         code = None
+    session.clear()
     return render_template('prove_status.html', visa=visa, code=code)
 
 @app.route("/prove-status/view/<visa_number>", methods=['GET', 'POST'])
@@ -66,6 +68,7 @@ def show_status_view(visa_number):
         visa = registry.get('/visas/'+visa_number).data
         if _check_code(form.code.data, visa):
             person = registry.get(visa['person_uri']).data
+            session.clear()
             return render_template('show_status_view.html', visa=visa, person=person)
         else:
             flash('Invalid code')
