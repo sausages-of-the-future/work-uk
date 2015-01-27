@@ -51,6 +51,7 @@ def prove_status():
         code = _create_code(visa)
     else:
         visa = None
+        code = None
     return render_template('prove_status.html', visa=visa, code=code)
 
 @app.route("/prove-status/view/<visa_number>", methods=['GET', 'POST'])
