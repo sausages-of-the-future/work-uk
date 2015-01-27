@@ -4,16 +4,18 @@
   <div class="row">
     <div class="small-12 columns">
 
+      {% if visa %}
         <ul class="verified-facts">
           <li>
             <span>&#10003;</span>
             You are eligible to work in the UK until {{ visa.expires_at | format_date }}. <a class="register-link" href="#"><i class="fa fa-list-alt fa-1"></i> view source</a>
           </li>
         </ul>
-        <h3>Send this link to your employer:</h3>
+        <h3>Send this link and code below to your employer:</h3>
         <p>
           <input type="text" value="{{config.BASE_URL}}{{url_for('show_status_view', visa_number=visa.uri|visa_number)}}" />
         </p>
+        <p>Code: {{ code }}</p>
         <p>
           They will be able to use it to verify the following information about you:
         </p>
@@ -28,6 +30,17 @@
         <p>
           You will also need to show them your passport so they can check your number.
         </p>
+
+        {% else %}
+
+        <ul class="verified-facts">
+          <li>
+            <span>&#10003;</span>
+            You do not have any current visas.
+          </li>
+        </ul>
+
+        {% endif %}
 
     </div>
   </div>

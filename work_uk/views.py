@@ -1,9 +1,9 @@
 import os
 import dateutil.parser
 
-from flask import request, redirect, render_template, url_for, session, current_app
+from flask import request, redirect, render_template, url_for, session, current_app, flash
 
-from work_uk import app, oauth
+from work_uk import app, oauth, redis_client, forms
 
 from decorators import registry_oauth_required
 
@@ -48,22 +48,29 @@ def prove_status():
     visas = registry.get('/visas').data
     if visas:
         visa = visas[0]
+        code = _create_code(visa)
     else:
         visa = None
-    return render_template('prove_status.html', visa=visa)
+    return render_template('prove_status.html', visa=visa, code=code)
 
-@app.route("/prove-status/view/<visa_number>")
+@app.route("/prove-status/view/<visa_number>", methods=['GET', 'POST'])
 @registry_oauth_required
 def show_status_view(visa_number):
     if not session.get('registry_token', False):
         return redirect(url_for('verify'))
 
-    visa = registry.get('/visas/'+visa_number).data
-    person = registry.get(visa['person_uri']).data
+    form = forms.CheckCode(request.form)
 
-    #TODO check a token provided to authorize view
-    # and handle unauthorized or not found gracefully
-    return render_template('show_status_view.html', visa=visa, person=person)
+    if form.validate_on_submit():
+        visa = registry.get('/visas/'+visa_number).data
+        if _check_code(form.code.data, visa):
+            person = registry.get(visa['person_uri']).data
+            return render_template('show_status_view.html', visa=visa, person=person)
+        else:
+            flash('Invalid code')
+            return render_template('check_code.html', form=form)
+    else:
+        return render_template('check_code.html', form=form)
 
 @app.route("/sponsorship")
 def sponsorship():
@@ -92,5 +99,32 @@ def verified():
         return redirect(resume_url)
     else:
         return redirect(url_for('index'))
+
+
+def _create_code(visa):
+    import string, random, pickle
+    chars = string.ascii_uppercase + string.digits
+    code = ''.join(random.sample(chars, 5))
+    visa_number = visa_number_filter(visa['uri'])
+    stored_codes = redis_client.get(visa_number)
+    if stored_codes:
+        code_list = pickle.loads(stored_codes)
+        code_list.append(code)
+    else:
+        code_list = [code]
+    redis_client.set(visa_number, pickle.dumps(code_list))
+
+    return code
+
+def _check_code(code, visa):
+    import pickle
+    visa_number = visa_number_filter(visa['uri'])
+    stored_codes = redis_client.get(visa_number)
+    if stored_codes:
+        code_list = pickle.loads(stored_codes)
+        return code in code_list
+    else:
+        return False
+
 
 
