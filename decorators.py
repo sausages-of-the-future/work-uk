@@ -9,3 +9,4 @@ def registry_oauth_required(f):
             return redirect(url_for('verify'))
         return f(*args, **kwargs)
     return decorated_function
+

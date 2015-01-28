@@ -1,21 +1,33 @@
 {% extends "base_transaction.html" %}
 {% block title %}Prove status{% endblock %}
+{% block header_title %}<a href="/">Proof of immigration status</a>{% endblock %}
 {% block transaction_content %}
   <div class="row">
     <div class="small-12 columns">
-
       {% if visa %}
         <ul class="verified-facts">
           <li>
-            <span>&#10003;</span>
-            You are eligible to work in the UK until {{ visa.expires_at | format_date }}. <a class="register-link" href="#"><i class="fa fa-list-alt fa-1"></i> view source</a>
+            You are eligible to work in the <strong>UK until {{ visa.expires_at | format_date }}</strong>. The reference number for your visa is <strong>{{visa.uri|visa_number}}</strong>
           </li>
         </ul>
-        <h3>Send this link and code below to your employer:</h3>
+        <hr/>
+        <h3>Sharing your status</h3>
         <p>
-          <input type="text" value="{{config.BASE_URL}}{{url_for('show_status_view', visa_number=visa.uri|visa_number)}}" />
+          You may need to prove your status to employers, banks or landlords. You can do this 
+          by providing them with:
         </p>
-        <p>Code: {{ code }}</p>
+        <h4>1) Give them this link</h4>
+
+        <p>
+          <a href="{{config.BASE_URL}}{{url_for('show_status_view', visa_number=visa.uri|visa_number)}}">{{config.BASE_URL}}{{url_for('show_status_view', visa_number=visa.uri|visa_number)}}</a>
+        </p>
+        <h4>2) Give them  a one use access code</h4>
+        <ul>
+          {% for code in codes %}
+            <li>{{code}}</li>
+          {% endfor %}
+        </ul>
+        <hr/>
         <p>
           They will be able to use it to verify the following information about you:
         </p>

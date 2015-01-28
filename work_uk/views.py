@@ -19,6 +19,7 @@ registry = oauth.remote_app(
     authorize_url='%s/oauth/authorize' % app.config['REGISTRY_BASE_URL']
 )
 
+#filters
 
 @app.template_filter('visa_number')
 def visa_number_filter(value):
@@ -28,7 +29,6 @@ def visa_number_filter(value):
 def format_date_filter(value):
     date = dateutil.parser.parse(str(value))
     return date.strftime('%d %B %Y')
-
 
 #auth helper
 @registry.tokengetter
@@ -47,14 +47,15 @@ def prove_status():
         return redirect(url_for('verify'))
 
     visas = registry.get('/visas').data
+    codes = []
+    visa = None
     if visas:
         visa = visas[0]
-        code = _create_code(visa)
-    else:
-        visa = None
-        code = None
+        for i in range(0, 4):
+            codes.append(_create_code(visa))
+
     session.clear()
-    return render_template('prove_status.html', visa=visa, code=code)
+    return render_template('prove_status.html', visa=visa, codes=codes)
 
 @app.route("/prove-status/view/<visa_number>", methods=['GET', 'POST'])
 @registry_oauth_required
@@ -103,7 +104,6 @@ def verified():
         return redirect(resume_url)
     else:
         return redirect(url_for('index'))
-
 
 def _create_code(visa):
     import string, random, pickle
