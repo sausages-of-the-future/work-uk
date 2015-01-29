@@ -47,12 +47,12 @@ def prove_status():
         return redirect(url_for('verify'))
 
     visas = registry.get('/visas').data
-    codes = []
     visa = None
     if visas:
         visa = visas[0]
-        for i in range(0, 4):
-            codes.append(_create_code(visa))
+        codes = _create_codes(visa, 5)
+    else:
+        codes = []
 
     session.clear()
     return render_template('prove_status.html', visa=visa, codes=codes)
@@ -67,7 +67,7 @@ def show_status_view(visa_number):
 
     if form.validate_on_submit():
         visa = registry.get('/visas/'+visa_number).data
-        if _check_code(form.code.data, visa):
+        if _check_and_remove_code(form.code.data, visa):
             person = registry.get(visa['person_uri']).data
             session.clear()
             return render_template('show_status_view.html', visa=visa, person=person)
@@ -105,30 +105,30 @@ def verified():
     else:
         return redirect(url_for('index'))
 
-def _create_code(visa):
+def _create_codes(visa, count):
     import string, random, pickle
     chars = string.ascii_uppercase + string.digits
-    code = ''.join(random.sample(chars, 5))
     visa_number = visa_number_filter(visa['uri'])
     stored_codes = redis_client.get(visa_number)
     if stored_codes:
         code_list = pickle.loads(stored_codes)
+    else:
+        code_list = []
+    for i in range(len(code_list), count):
+        code = ''.join(random.sample(chars, 5))
         code_list.append(code)
-    else:
-        code_list = [code]
     redis_client.set(visa_number, pickle.dumps(code_list))
+    return code_list
 
-    return code
-
-def _check_code(code, visa):
+def _check_and_remove_code(code, visa):
     import pickle
+    found = False
     visa_number = visa_number_filter(visa['uri'])
     stored_codes = redis_client.get(visa_number)
     if stored_codes:
         code_list = pickle.loads(stored_codes)
-        return code in code_list
-    else:
-        return False
-
-
-
+        if code in code_list:
+            found = True
+            code_list.remove(code)
+            redis_client.set(visa_number, pickle.dumps(code_list))
+    return found
