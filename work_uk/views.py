@@ -1,6 +1,8 @@
 import os
 import dateutil.parser
 
+from flask_oauthlib.client import OAuthException
+
 from flask import request, redirect, render_template, url_for, session, current_app, flash
 
 from work_uk import app, oauth, redis_client, forms
@@ -91,13 +93,14 @@ def verify():
 @app.route('/verified')
 def verified():
     resp = registry.authorized_response()
-    if resp is None:
+    if resp is None or isinstance(resp, OAuthException):
         return 'Access denied: reason=%s error=%s' % (
         request.args['error_reason'],
         request.args['error_description']
         )
 
     session['registry_token'] = (resp['access_token'], '')
+    session['refresh_token'] = resp['refresh_token']
     if session.get('resume_url'):
         resume_url = session.get('resume_url')
         session.pop('resume_url', None)
